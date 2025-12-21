@@ -9,7 +9,7 @@ RAW_DIR = DATA_DIR / "raw"
 PROCESSED_DIR = DATA_DIR / "processed"
 RESULTS_DIR = DATA_DIR / "results"
 
-DEFAULT_N_VIDEOS = 50
+DEFAULT_N_VIDEOS = 30
 DEFAULT_BASELINE_WINDOW = 20
 
 def ensure_dirs() -> None:

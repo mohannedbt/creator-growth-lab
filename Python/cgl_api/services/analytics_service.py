@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 
 from .youtube_service import YouTubeService
 from .feature_service import FeatureService
+from .model_service import ModelService
 
 from ..core.config import ensure_dirs, RESULTS_DIR
 from ..schemas.request import ChannelAnalysisRequest
@@ -99,27 +100,13 @@ class AnalyticsService:
             )
 
         # ---- Dummy drivers (until Step D) ----
-        drivers = [
-            DriverEffect(feature="title_word_count", effect_percent=-9.0, unit_change="-5 words", direction="decrease"),
-            DriverEffect(feature="has_number", effect_percent=6.0, unit_change="+1 (false→true)", direction="increase"),
-        ]
+        ms = ModelService()
+        model_out = ms.train_and_explain(rows_sorted)
 
-        # ---- Dummy recommendations (until Step D) ----
-        recs = [
-            Recommendation(
-                title="Shorten titles slightly",
-                detail="For your channel, shorter titles are associated with higher relative performance.",
-                expected_impact_percent=9.0,
-                confidence="medium",
-            ),
-            Recommendation(
-                title="Use numbers in titles occasionally",
-                detail="Titles containing numbers are associated with improved relative performance in your recent uploads.",
-                expected_impact_percent=6.0,
-                confidence="low",
-            ),
-        ]
+        drivers = [DriverEffect(**d) for d in model_out.drivers]
+        recs = [Recommendation(**r) for r in model_out.recommendations]
 
+        warnings = list(model_out.warnings)  # keep your existing warnings too if you have them
         resp = AnalyticsResponse(
             meta=MetaInfo(
                 channel_id=req.channel_id,
@@ -131,7 +118,7 @@ class AnalyticsService:
             trends=trends,
             drivers=drivers,
             recommendations=recs,
-            warnings=[],
+            warnings=warnings,
         )
 
         self._save_result(resp)
