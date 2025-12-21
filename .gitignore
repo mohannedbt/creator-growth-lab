@@ -1,0 +1,58 @@
+# ==========
+# Secrets
+# ==========
+.env
+.env.*
+!.env.example
+
+# ==========
+# Python / venv
+# ==========
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+dist/
+build/
+pip-wheel-metadata/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ==========
+# FastAPI / Uvicorn
+# ==========
+*.log
+
+# ==========
+# Jupyter (if you use it)
+# ==========
+.ipynb_checkpoints/
+
+# ==========
+# Data artifacts (IMPORTANT for this project)
+# ==========
+# Keep raw/processed/results out of git (they can be huge + include API responses)
+python/cgl_api/data/
+cgl_api/data/
+data/
+
+# If you later store models
+models/
+*.pkl
+*.joblib
+
+# ==========
+# OS / Editor
+# ==========
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
