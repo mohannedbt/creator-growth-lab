@@ -7,6 +7,10 @@ class MetaInfo(BaseModel):
     n_videos: int
     baseline_window: int
     generated_at: datetime
+class ChannelIdentity(BaseModel):
+    channel_id: str
+    title: str
+    thumbnail_url: str
 
 class Kpis(BaseModel):
     videos_analyzed: int
@@ -39,3 +43,5 @@ class AnalyticsResponse(BaseModel):
     drivers: List[DriverEffect] = Field(default_factory=list)
     recommendations: List[Recommendation] = Field(default_factory=list)
     warnings: List[str] = Field(default_factory=list)
+    channel: ChannelIdentity
+

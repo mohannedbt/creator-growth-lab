@@ -1,0 +1,87 @@
+@model CreatorGrowthLab.UI.Controllers.DashboardViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Historical Analysis";
+
+    string F0(double x) => x.ToString("N0", CultureInfo.InvariantCulture);
+    string F2(double x) => x.ToString("0.##", CultureInfo.InvariantCulture);
+    string P2(double x) => (x * 100.0).ToString("0.##", CultureInfo.InvariantCulture) + "%";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- ================= HEADER ================= -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-3xl font-black text-slate-900">
+                Historical Analysis
+            </h1>
+            <p class="text-sm text-slate-600 font-medium mt-1">
+                Snapshot generated on
+                <span class="font-semibold">
+                    @Model.Response!.Meta.GeneratedAt.ToString("MMMM dd, yyyy HH:mm") UTC
+                </span>
+            </p>
+        </div>
+
+        <a asp-controller="History"
+           asp-action="Index"
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-slate-300 bg-white text-sm font-bold text-slate-700 hover:bg-slate-50 transition">
+            ← Back to History
+        </a>
+    </div>
+
+    <!-- ================= CONTEXT CARD ================= -->
+    <div class="rounded-2xl border-2 border-indigo-200 bg-indigo-50 p-6">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm font-semibold text-indigo-900">
+            <div>
+                Channel
+                <div class="font-black mt-1">@Model.Response.Meta.ChannelId</div>
+            </div>
+            <div>
+                Videos Analyzed
+                <div class="font-black mt-1">@Model.Response.Meta.NVideos</div>
+            </div>
+            <div>
+                Baseline Window
+                <div class="font-black mt-1">@Model.Response.Meta.BaselineWindow</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= WARNINGS ================= -->
+    @if (Model.Response.Warnings?.Any() == true)
+    {
+        <div class="rounded-2xl border-2 border-amber-300 bg-amber-50 p-6">
+            <h3 class="font-bold text-amber-900 mb-2">
+                Interpretation Notes
+            </h3>
+            <ul class="text-sm text-amber-900 space-y-1">
+                @foreach (var w in Model.Response.Warnings)
+                {
+                    <li>• @w</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <!-- ================= KPIs ================= -->
+    @await Html.PartialAsync("Partials/_KpiCards", Model.Response)
+
+    <!-- ================= TREND ================= -->
+    @await Html.PartialAsync("Partials/_TrendChart", Model.Response)
+
+    <!-- ================= DRIVERS + RECOMMENDATIONS ================= -->
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+        @await Html.PartialAsync("Partials/_DriversTable", Model.Response)
+        @await Html.PartialAsync("Partials/_Recommendations", Model.Response)
+    </div>
+
+    <!-- ================= FOOTER ================= -->
+    <div class="text-center pt-6">
+        <span class="text-xs font-semibold text-slate-500">
+            Historical snapshot · Read-only view
+        </span>
+    </div>
+</div>

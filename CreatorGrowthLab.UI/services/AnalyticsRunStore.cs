@@ -17,7 +17,8 @@ namespace CreatorGrowthLab.UI.Services
 
         public AnalyticsRunStore(IConfiguration config)
         {
-            _resultsDir = config["AnalyticsStorage:ResultsDir"] ?? "App_Data/results";
+            _resultsDir = config["AnalyticsStorage:ResultsDir"]
+                          ?? "App_Data/results";
         }
 
         public string ResultsDir => _resultsDir;

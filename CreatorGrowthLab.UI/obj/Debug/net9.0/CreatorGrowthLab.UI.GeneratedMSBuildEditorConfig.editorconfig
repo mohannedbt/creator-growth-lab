@@ -24,20 +24,12 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXGluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/files/Ambitious projects/Yt_Creator_Helper/CreatorGrowthLab.UI/Views/Dashboard/Partials/_DriversTable.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXFBhcnRpYWxzXF9Ecml2ZXJzVGFibGUuY3NodG1s
+[D:/files/Ambitious projects/Yt_Creator_Helper/CreatorGrowthLab.UI/Views/history/index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcaGlzdG9yeVxpbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/files/Ambitious projects/Yt_Creator_Helper/CreatorGrowthLab.UI/Views/Dashboard/Partials/_KpiCards.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXFBhcnRpYWxzXF9LcGlDYXJkcy5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/files/Ambitious projects/Yt_Creator_Helper/CreatorGrowthLab.UI/Views/Dashboard/Partials/_Recommendations.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXFBhcnRpYWxzXF9SZWNvbW1lbmRhdGlvbnMuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[D:/files/Ambitious projects/Yt_Creator_Helper/CreatorGrowthLab.UI/Views/Dashboard/Partials/_TrendChart.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXFBhcnRpYWxzXF9UcmVuZENoYXJ0LmNzaHRtbA==
+[D:/files/Ambitious projects/Yt_Creator_Helper/CreatorGrowthLab.UI/Views/history/ViewBoard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcaGlzdG9yeVxWaWV3Qm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/files/Ambitious projects/Yt_Creator_Helper/CreatorGrowthLab.UI/Views/Home/Index.cshtml]
@@ -54,6 +46,22 @@ build_metadata.AdditionalFiles.CssScope =
 
 [D:/files/Ambitious projects/Yt_Creator_Helper/CreatorGrowthLab.UI/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/files/Ambitious projects/Yt_Creator_Helper/CreatorGrowthLab.UI/Views/Shared/Partials/_DriversTable.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFBhcnRpYWxzXF9Ecml2ZXJzVGFibGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/files/Ambitious projects/Yt_Creator_Helper/CreatorGrowthLab.UI/Views/Shared/Partials/_KpiCards.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFBhcnRpYWxzXF9LcGlDYXJkcy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/files/Ambitious projects/Yt_Creator_Helper/CreatorGrowthLab.UI/Views/Shared/Partials/_Recommendations.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFBhcnRpYWxzXF9SZWNvbW1lbmRhdGlvbnMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[D:/files/Ambitious projects/Yt_Creator_Helper/CreatorGrowthLab.UI/Views/Shared/Partials/_TrendChart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXFBhcnRpYWxzXF9UcmVuZENoYXJ0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/files/Ambitious projects/Yt_Creator_Helper/CreatorGrowthLab.UI/Views/Shared/_ValidationScriptsPartial.cshtml]

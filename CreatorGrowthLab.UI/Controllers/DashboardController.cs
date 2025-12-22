@@ -11,7 +11,9 @@ namespace CreatorGrowthLab.UI.Controllers
     {
         private readonly AnalyticsApiClientService _api;
 
-        public DashboardController(AnalyticsApiClientService api)
+        public DashboardController(
+            AnalyticsApiClientService api
+            )
         {
             _api = api;
         }
@@ -23,7 +25,7 @@ namespace CreatorGrowthLab.UI.Controllers
 
             var vm = new DashboardViewModel
             {
-                Request = new ChannelAnalysisRequest()
+                IsReadOnly = false
             };
 
             if (!string.IsNullOrWhiteSpace(channelId))
@@ -38,6 +40,9 @@ namespace CreatorGrowthLab.UI.Controllers
         {
             ViewBag.ApiHealthy = await _api.HealthAsync(ct);
 
+            if (vm.IsReadOnly)
+                return BadRequest("Read-only dashboard");
+
             if (string.IsNullOrWhiteSpace(vm.Request.ChannelId))
             {
                 vm.ErrorMessage = "ChannelId is required (starts with UC...).";
@@ -46,7 +51,9 @@ namespace CreatorGrowthLab.UI.Controllers
 
             try
             {
+                // 🔥 Single source of truth
                 vm.Response = await _api.AnalyzeChannelAsync(vm.Request, ct);
+
             }
             catch (Exception ex)
             {
@@ -56,11 +63,15 @@ namespace CreatorGrowthLab.UI.Controllers
             return View("Index", vm);
         }
     }
+public class DashboardViewModel
+{
+    public ChannelAnalysisRequest Request { get; set; } = new();
+    public AnalyticsResponse? Response { get; set; }
 
-    public class DashboardViewModel
-    {
-        public ChannelAnalysisRequest Request { get; set; } = new();
-        public AnalyticsResponse? Response { get; set; }
-        public string? ErrorMessage { get; set; }
-    }
+    public ChannelIdentity? Channel => Response?.Channel;
+
+    public bool IsReadOnly { get; set; } = false;
+    public string? ErrorMessage { get; set; }
+}
+
 }

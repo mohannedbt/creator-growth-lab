@@ -1,0 +1,86 @@
+@model IReadOnlyList<CreatorGrowthLab.UI.Services.RunListItem>
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Analysis History";
+    string F0(double x) => x.ToString("N0", CultureInfo.InvariantCulture);
+    string P2(double x) => (x * 100).ToString("0.##") + "%";
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+
+    <!-- Header -->
+    <div>
+        <h1 class="text-3xl font-black text-slate-900">
+            Analysis History
+        </h1>
+        <p class="text-sm text-slate-600 font-medium mt-1">
+            Previously generated analytics snapshots
+        </p>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-12 text-center">
+            <h2 class="text-lg font-bold text-slate-900">
+                No history yet
+            </h2>
+            <p class="text-sm text-slate-600 mt-2">
+                Run your first analysis from the dashboard.
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="overflow-hidden rounded-2xl border-2 border-slate-200 bg-white shadow-lg">
+            <table class="w-full">
+                <thead class="bg-slate-50 border-b-2 border-slate-200">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-black text-slate-700 uppercase">Channel</th>
+                        <th class="px-6 py-4 text-left text-xs font-black text-slate-700 uppercase">Generated</th>
+                        <th class="px-6 py-4 text-right text-xs font-black text-slate-700 uppercase">Baseline</th>
+                        <th class="px-6 py-4 text-right text-xs font-black text-slate-700 uppercase">Performance</th>
+                        <th class="px-6 py-4 text-right text-xs font-black text-slate-700 uppercase">Engagement</th>
+                        <th class="px-6 py-4"></th>
+                    </tr>
+                </thead>
+
+                <tbody class="divide-y divide-slate-100">
+                @foreach (var r in Model)
+                {
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="px-6 py-4 font-semibold text-slate-900">
+                            @r.ChannelId
+                        </td>
+
+                        <td class="px-6 py-4 text-sm text-slate-600">
+                            @r.GeneratedAtUtc.ToString("MMM dd, yyyy HH:mm") UTC
+                        </td>
+
+                        <td class="px-6 py-4 text-right font-semibold">
+                            @F0(r.BaselineViewsPerDay)
+                        </td>
+
+                        <td class="px-6 py-4 text-right font-bold @(r.MedianRelativePerformance >= 1 ? "text-emerald-600" : "text-rose-600")">
+                            @r.MedianRelativePerformance.ToString("0.##")x
+                        </td>
+
+                        <td class="px-6 py-4 text-right text-slate-700 font-semibold">
+                            @P2(r.AvgEngagementRate)
+                        </td>
+
+                        <td class="px-6 py-4 text-right">
+                            <a asp-controller="History"
+                               asp-action="ViewBoard"
+                               asp-route-id="@r.FileName"
+                               class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-indigo-600 text-white hover:bg-indigo-700 transition">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

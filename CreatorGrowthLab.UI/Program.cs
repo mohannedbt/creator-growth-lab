@@ -12,6 +12,7 @@ builder.Services.AddHttpClient<AnalyticsApiClientService>(http =>
     http.Timeout = TimeSpan.FromSeconds(60);
 });
 builder.Services.AddSingleton<AnalyticsRunStore>();
+builder.Services.AddHttpClient<YouTubeChannelService>();
 
 var app = builder.Build();
 
