@@ -44,7 +44,7 @@ cgl_api/data/
 data/
 
 # If you later store models
-models/
+python/cgl_api/models/
 *.pkl
 *.joblib
 
