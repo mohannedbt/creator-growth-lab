@@ -1,0 +1,193 @@
+@model CreatorGrowthLab.UI.Controllers.DashboardViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Dashboard - Creator Growth Lab";
+    var apiHealthy = (ViewBag.ApiHealthy as bool?) ?? false;
+
+    string F0(double x) => x.ToString("N0", CultureInfo.InvariantCulture);
+    string F2(double x) => x.ToString("0.##", CultureInfo.InvariantCulture);
+    string P2(double x) => (x * 100.0).ToString("0.##", CultureInfo.InvariantCulture) + "%";
+}
+
+@section TopbarRight {
+    <div class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border-2 backdrop-blur-sm 
+        @(apiHealthy ? "bg-emerald-50/80 text-emerald-700 border-emerald-300" : "bg-rose-50/80 text-rose-700 border-rose-300")">
+        <span class="relative flex h-2.5 w-2.5">
+            <span class="absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping @(apiHealthy ? "bg-emerald-500" : "bg-rose-500")"></span>
+            <span class="relative inline-flex h-2.5 w-2.5 rounded-full @(apiHealthy ? "bg-emerald-600" : "bg-rose-600")"></span>
+        </span>
+        API Status: @(apiHealthy ? "Healthy" : "Offline")
+    </div>
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- ================= QUERY PANEL ================= -->
+<div class="relative overflow-hidden rounded-3xl border-2 border-slate-200/60 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 shadow-2xl">
+    <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
+    <div class="absolute inset-0 bg-grid-white/[0.03] bg-[size:30px_30px]"></div>
+    
+    <div class="relative p-8 lg:p-12">
+        <div class="flex flex-col gap-8">
+            <div class="space-y-4">
+                <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-400/20 backdrop-blur-md">
+                    <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <span class="text-xs font-bold text-indigo-300 uppercase tracking-widest">Growth Intelligence v2.0</span>
+                </div>
+                <h1 class="text-4xl lg:text-5xl font-black tracking-tight text-white leading-tight">
+                    Channel <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-400">Analysis</span>
+                </h1>
+                <p class="text-lg text-slate-400 max-w-2xl font-medium leading-relaxed">
+                    Input a YouTube ID or handle to generate a statistical performance baseline and identify hidden growth levers.
+                </p>
+            </div>
+
+            <form asp-action="Analyze" method="post" class="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-1 shadow-inner">
+                @Html.AntiForgeryToken()
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-1">
+                    
+                    <div class="md:col-span-6 p-4">
+                        <label class="block text-xs font-black text-indigo-300 uppercase tracking-widest mb-2 px-1">Your Channel ID</label>
+                        <div class="relative">
+                            <input asp-for="Request.ChannelId" 
+                                   class="w-full rounded-xl border-0 bg-white/10 text-white placeholder-slate-500 focus:ring-2 focus:ring-indigo-500 transition-all px-4 py-3.5 font-bold" 
+                                   placeholder="UCxxxxxxxx or @@handle" />
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="w-5 h-5 text-slate-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-2 p-4 border-l border-white/5">
+                        <label class="block text-xs font-black text-indigo-300 uppercase tracking-widest mb-2 px-1">Sample Size</label>
+                        <input asp-for="Request.NVideos" type="number" 
+                               class="w-full rounded-xl border-0 bg-white/10 text-white focus:ring-2 focus:ring-indigo-500 px-4 py-3.5 font-bold" />
+                    </div>
+
+                    <div class="md:col-span-2 p-4 border-l border-white/5">
+                        <label class="block text-xs font-black text-indigo-300 uppercase tracking-widest mb-2 px-1">Window</label>
+                        <input asp-for="Request.BaselineWindow" type="number" 
+                               class="w-full rounded-xl border-0 bg-white/10 text-white focus:ring-2 focus:ring-indigo-500 px-4 py-3.5 font-bold" />
+                    </div>
+
+                    <div class="md:col-span-2 p-2 flex items-stretch">
+                        <button type="submit" class="w-full rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white font-black transition-all shadow-lg hover:shadow-indigo-500/25 active:scale-95 flex items-center justify-center gap-2 group">
+                            <span class="uppercase tracking-widest text-[10px]">Run Analysis</span>
+                            <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <!-- ================= ERROR ================= -->
+    @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+    {
+        <div class="rounded-2xl border-2 border-rose-300 bg-rose-50 p-6">
+            <h3 class="font-bold text-rose-900">Analysis Error</h3>
+            <p class="text-sm text-rose-800 mt-1">@Model.ErrorMessage</p>
+        </div>
+    }
+
+    <!-- ================= EMPTY STATE ================= -->
+    @if (Model.Response == null)
+    {
+        <div class="rounded-3xl border-2 border-dashed border-slate-300 bg-slate-50 p-12 text-center">
+            <h2 class="text-xl font-bold text-slate-900">No analysis yet</h2>
+            <p class="text-sm text-slate-600 mt-2">
+                Enter a channel ID above to run your first analysis.
+            </p>
+        </div>
+    }
+    else
+    {
+        <!-- ================= WARNINGS ================= -->
+        @if (Model.Response.Warnings?.Any() == true)
+        {
+            <div class="rounded-2xl border-2 border-amber-300 bg-amber-50 p-6">
+                <h3 class="font-bold text-amber-900 mb-2">Interpretation Notes</h3>
+                <ul class="text-sm text-amber-900 space-y-1">
+                    @foreach (var w in Model.Response.Warnings)
+                    {
+                        <li>• @w</li>
+                    }
+                </ul>
+            </div>
+        }
+
+        <!-- ================= KPIs ================= -->
+        @await Html.PartialAsync("Partials/_KpiCards", Model.Response)
+
+        <!-- ================= TREND ================= -->
+        @await Html.PartialAsync("Partials/_TrendChart", Model.Response)
+
+        <!-- ================= DRIVERS + RECS ================= -->
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+            @await Html.PartialAsync("Partials/_DriversTable", Model.Response)
+            @await Html.PartialAsync("Partials/_Recommendations", Model.Response)
+        </div>
+
+        <!-- ================= FOOTER META ================= -->
+        <div class="text-center pt-4">
+            <span class="text-sm font-semibold text-slate-600">
+                Generated @Model.Response.Meta.GeneratedAt.ToString("MMMM dd, yyyy HH:mm") UTC
+            </span>
+        </div>
+    }
+</div>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const canvas = document.getElementById('trendChart');
+if (!canvas) {
+    console.warn("trendChart canvas not found");
+} else {
+    // chart code goes here
+}
+
+        const labels = JSON.parse(canvas.dataset.labels);
+        const data = JSON.parse(canvas.dataset.values);
+
+        const ctx = canvas.getContext('2d');
+
+        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(99, 102, 241, 0.25)');
+        gradient.addColorStop(1, 'rgba(99, 102, 241, 0.01)');
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [{
+                    data,
+                    borderColor: '#6366f1',
+                    backgroundColor: gradient,
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        ticks: {
+                            callback: v => v.toFixed(1) + 'x'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

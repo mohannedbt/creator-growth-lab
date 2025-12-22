@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Creator Growth Lab</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif']
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        
+        /* Ensures the body takes up full height and hides global scroll */
+        body {
+            background: #f8fafc;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Custom scrollbar for the content area */
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { 
+            background: #cbd5e1; 
+            border-radius: 10px; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="antialiased flex flex-col">
+
+    <header class="h-16 shrink-0 z-50 backdrop-blur-xl bg-white/80 border-b-2 border-slate-200 shadow-sm px-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <a href="/" class="flex items-center gap-3">
+                <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-600 to-indigo-500 flex items-center justify-center shadow-lg">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <span class="text-lg font-black text-slate-900">Creator Growth Lab</span>
+            </a>
+        </div>
+
+        <div class="flex items-center gap-3">
+            @RenderSection("TopbarRight", required: false)
+            <button class="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 border-2 border-slate-200 transition-all">
+                <span class="text-sm font-bold">Account</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden">
+        
+        <aside class="w-64 shrink-0 border-r-2 border-slate-200 bg-white/80 backdrop-blur-xl hidden md:block">
+            <nav class="p-4 space-y-1 text-sm font-semibold text-slate-700">
+                <div class="text-xs uppercase tracking-wider text-slate-400 px-3 mb-2">Analytics</div>
+                <a href="/" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 transition-colors">Dashboard</a>
+                <a href="/Resolve" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 transition-colors">Get Channel ID</a>
+                <a href="/History" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 transition-colors">History</a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 transition-colors">Drivers</a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 transition-colors">Recommendations</a>
+                
+                <div class="border-t border-slate-200 my-4"></div>
+                <div class="text-xs uppercase tracking-wider text-slate-400 px-3 mb-2">System</div>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-slate-100 transition-colors">Settings</a>
+            </nav>
+        </aside>
+
+        <div class="flex-1 flex flex-col overflow-y-auto custom-scrollbar bg-slate-50/50">
+            
+            <main class="flex-1 p-8">
+                <div class="max-w-7xl mx-auto">
+                    @RenderBody()
+                </div>
+            </main>
+
+            <footer class="border-t-2 border-slate-200 bg-white/80 backdrop-blur-xl shrink-0">
+                <div class="max-w-7xl mx-auto px-8 py-12">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                        <div class="col-span-1">
+                            <div class="flex items-center gap-2 mb-4">
+                                <div class="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                                </div>
+                                <span class="font-bold text-slate-900">Creator Growth Lab</span>
+                            </div>
+                            <p class="text-sm text-slate-500 leading-relaxed">Advanced analytics platform for creators. Data-driven insights to accelerate channel growth.</p>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-4">Product</h3>
+                            <ul class="space-y-2 text-sm text-slate-600">
+                                <li><a href="#" class="hover:text-indigo-600 transition-colors">Features</a></li>
+                                <li><a href="#" class="hover:text-indigo-600 transition-colors">Pricing</a></li>
+                                <li><a href="#" class="hover:text-indigo-600 transition-colors">API</a></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-4">Company</h3>
+                            <ul class="space-y-2 text-sm text-slate-600">
+                                <li><a href="#" class="hover:text-indigo-600 transition-colors">About</a></li>
+                                <li><a href="#" class="hover:text-indigo-600 transition-colors">Blog</a></li>
+                                <li><a href="#" class="hover:text-indigo-600 transition-colors">Contact</a></li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest mb-4">Legal</h3>
+                            <ul class="space-y-2 text-sm text-slate-600">
+                                <li><a href="#" class="hover:text-indigo-600 transition-colors">Privacy Policy</a></li>
+                                <li><a href="#" class="hover:text-indigo-600 transition-colors">Terms</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <p class="text-xs font-medium text-slate-500">
+                            © @(DateTime.Now.Year) Creator Growth Lab. All rights reserved.
+                        </p>
+                        <div class="flex gap-4">
+                            <div class="w-24 h-4 bg-slate-100 rounded animate-pulse"></div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

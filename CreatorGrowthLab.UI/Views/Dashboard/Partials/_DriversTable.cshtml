@@ -1,0 +1,65 @@
+@model CreatorGrowthLab.UI.Models.Analytics.AnalyticsResponse
+@using System.Globalization
+
+@{
+    string F2(double x) => x.ToString("0.##", CultureInfo.InvariantCulture);
+}
+
+<div class="rounded-2xl border-2 border-slate-200 bg-white shadow-xl overflow-hidden">
+    <div class="bg-gradient-to-r from-indigo-600 to-indigo-500 px-8 py-6">
+        <div class="flex items-center gap-3">
+            <div class="p-2 rounded-xl bg-white/20 backdrop-blur-sm">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                </svg>
+            </div>
+            <div>
+                <h2 class="text-2xl font-black text-white">Growth Drivers</h2>
+                <p class="text-sm text-indigo-100 font-medium mt-0.5">
+                    Statistical associations with performance
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead>
+                <tr class="bg-slate-50 border-b-2 border-slate-200">
+                    <th class="px-6 py-4 text-left text-xs font-black text-slate-700 uppercase tracking-wider">
+                        Feature
+                    </th>
+                    <th class="px-6 py-4 text-right text-xs font-black text-slate-700 uppercase tracking-wider">
+                        Change
+                    </th>
+                    <th class="px-6 py-4 text-right text-xs font-black text-slate-700 uppercase tracking-wider">
+                        Impact
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                @foreach (var d in Model.Drivers)
+                {
+                    var pos = d.EffectPercent >= 0;
+                    <tr class="hover:bg-slate-50 transition-colors">
+                        <td class="px-6 py-5">
+                            <div class="font-bold text-slate-900">@d.Feature</div>
+                        </td>
+                        <td class="px-6 py-5 text-right">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-slate-100 text-slate-700">
+                                @d.UnitChange
+                            </span>
+                        </td>
+                        <td class="px-6 py-5 text-right">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-black
+                                @(pos ? "bg-emerald-100 text-emerald-700" : "bg-rose-100 text-rose-700")">
+                                @(pos ? "+" : "")@F2(d.EffectPercent)%
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
