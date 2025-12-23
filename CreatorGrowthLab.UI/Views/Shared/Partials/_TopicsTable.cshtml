@@ -1,0 +1,51 @@
+@model List<CreatorGrowthLab.UI.Models.Analytics.TopicSummary>
+
+<div class="rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-sm">
+    <h3 class="text-lg font-black text-slate-900 mb-4">
+        Topic Performance & Momentum
+    </h3>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full text-sm">
+            <thead>
+                <tr class="text-slate-500 uppercase tracking-wider text-xs border-b">
+                    <th class="py-2 text-left">Topic</th>
+                    <th class="py-2 text-center">Videos</th>
+                    <th class="py-2 text-center">Avg</th>
+                    <th class="py-2 text-center">Recent</th>
+                    <th class="py-2 text-center">Momentum</th>
+                    <th class="py-2 text-center">Volatility</th>
+                    <th class="py-2 text-center">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var t in Model)
+            {
+                var status =
+                    t.Momentum >= 0.10 ? "Improving" :
+                    t.Momentum <= -0.10 ? "Fatigue" :
+                    "Stable";
+
+                var statusColor =
+                    status == "Improving" ? "text-emerald-600" :
+                    status == "Fatigue" ? "text-rose-600" :
+                    "text-slate-600";
+
+                <tr class="border-b last:border-0">
+                    <td class="py-2 font-semibold">@t.Label</td>
+                    <td class="py-2 text-center">@t.NVideos</td>
+                    <td class="py-2 text-center">@t.AvgRelativePerformance.ToString("0.00")x</td>
+                    <td class="py-2 text-center">@t.RecentAvgRelativePerformance.ToString("0.00")x</td>
+                    <td class="py-2 text-center">
+                        @t.Momentum.ToString("+0.00;-0.00;0.00")
+                    </td>
+                    <td class="py-2 text-center">@t.Volatility.ToString("0.00")</td>
+                    <td class="py-2 text-center font-bold @statusColor">
+                        @status
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

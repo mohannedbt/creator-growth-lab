@@ -151,15 +151,69 @@ else
         </div>
     </div>
 }
-
-
+    <h2 class="text-2xl font-black text-slate-900 mt-10 mb-4">
+        Channel Overview
+    </h2>
     @await Html.PartialAsync("Partials/_KpiCards", Model.Response)
+
+    <h2 class="text-2xl font-black text-slate-900 mt-12 mb-4">
+        Performance Over Time
+    </h2>
     @await Html.PartialAsync("Partials/_TrendChart", Model.Response)
 
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+
+<h2 class="text-2xl font-black text-slate-900 mt-12 mb-4">
+    What Drives Performance
+</h2>
+
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+
+    <!-- LEFT COLUMN: DRIVERS -->
+    <div>
         @await Html.PartialAsync("Partials/_DriversTable", Model.Response)
-        @await Html.PartialAsync("Partials/_Recommendations", Model.Response)
     </div>
+
+    <!-- RIGHT COLUMN: TOPICS -->
+    @if (Model.Response.Topics?.Any() == true)
+    {
+        <div>
+            <h3 class="text-2xl font-black text-slate-900 mb-2">
+                Topics That Matter Right Now
+            </h3>
+
+            <p class="text-sm text-slate-600 mb-6 max-w-2xl">
+                Topics are grouped by idea (not individual titles), sorted by recent usage and growth.
+                One-off experiments are grouped separately.
+            </p>
+
+            @await Html.PartialAsync(
+                "Partials/_TopicsCards",
+                Model.Response.Topics
+            )
+        </div>
+    }
+
+</div>
+
+
+
+
+    @if (Model.Response.TopicInsights?.Any() == true)
+    {
+        <h3 class="text-xl font-black text-slate-800 mt-8 mb-3">
+            Strategic Topic Insights
+        </h3>
+
+        @await Html.PartialAsync(
+            "Partials/_TopicInsights",
+            Model.Response.TopicInsights
+        )
+    }
+    <h2 class="text-2xl font-black text-slate-900 mt-12 mb-4">
+        Recommended Actions
+    </h2>
+    @await Html.PartialAsync("Partials/_Recommendations", Model.Response)
+
 
     <div class="text-center pt-4">
         <span class="text-sm font-semibold text-slate-600">

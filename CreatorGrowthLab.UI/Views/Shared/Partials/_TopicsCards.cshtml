@@ -1,0 +1,87 @@
+@model List<CreatorGrowthLab.UI.Models.Analytics.TopicSummary>
+
+<div class="space-y-6">
+@foreach (var t in Model)
+{
+    var status =
+        t.Momentum >= 0.10 ? "Rising" :
+        t.Momentum <= -0.10 ? "Fatiguing" :
+        "Stable";
+
+    var statusColor =
+        status == "Rising" ? "emerald" :
+        status == "Fatiguing" ? "rose" :
+        "slate";
+
+    <div class="relative overflow-hidden rounded-3xl border-2 border-slate-200 bg-white shadow-lg">
+        
+        <!-- Header -->
+        <div class="px-6 py-4 bg-gradient-to-r from-indigo-600 to-indigo-500 text-white">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xl font-black">@t.Label</h3>
+                <span class="px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider
+                             bg-@statusColor-100 text-@statusColor-700">
+                    @status
+                </span>
+            </div>
+            <p class="text-sm opacity-90 mt-1">
+                Based on @t.NVideos videos
+            </p>
+        </div>
+
+        <!-- Body -->
+        <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <!-- Typical outcome -->
+            <div>
+                <div class="text-xs uppercase tracking-widest text-slate-500 font-bold mb-1">
+                    Typical Result
+                </div>
+                <div class="text-3xl font-black text-slate-900">
+                    @t.MedianRelativePerformance.ToString("0.00")x
+                </div>
+                <p class="text-sm text-slate-500 mt-1">
+                    Most videos land here
+                </p>
+            </div>
+
+            <!-- Reliability -->
+            <div>
+                <div class="text-xs uppercase tracking-widest text-slate-500 font-bold mb-1">
+                    Reliability
+                </div>
+                <div class="text-3xl font-black text-slate-900">
+                    @( (t.HitRate * 100).ToString("0") )%
+                </div>
+                <p class="text-sm text-slate-500 mt-1">
+                    Chance to beat baseline
+                </p>
+            </div>
+
+            <!-- Recent range -->
+            <div>
+                <div class="text-xs uppercase tracking-widest text-slate-500 font-bold mb-1">
+                    Recent Range
+                </div>
+                <div class="text-lg font-black text-slate-900">
+                    @t.WorstRecent.ToString("0.00")x → @t.BestRecent.ToString("0.00")x
+                </div>
+                <p class="text-sm text-slate-500 mt-1">
+                    Upside vs downside lately
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="px-6 py-4 border-t bg-slate-50 flex items-center justify-between">
+            <div class="text-sm font-semibold text-slate-600">
+                Momentum: @t.Momentum.ToString("+0.00;-0.00;0.00")
+            </div>
+
+            <div class="text-xs text-slate-500">
+                Confidence: @( (t.Confidence * 100).ToString("0") )%
+            </div>
+        </div>
+    </div>
+}
+</div>

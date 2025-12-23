@@ -1,0 +1,14 @@
+@model List<string>
+
+<div class="rounded-3xl border-2 border-indigo-200 bg-indigo-50 p-6">
+    <h4 class="font-black text-indigo-900 mb-3">
+        Topic Insights
+    </h4>
+
+    <ul class="space-y-2 text-sm text-indigo-900">
+        @foreach (var insight in Model)
+        {
+            <li>• @insight</li>
+        }
+    </ul>
+</div>
