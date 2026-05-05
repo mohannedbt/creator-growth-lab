@@ -1,8 +1,135 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "GrowthLab Intelligence";
+    Layout = "_empty_layout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    /* Custom Reveal Animation Styles */
+    .reveal {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+        transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .reveal.active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    .delay-1 { transition-delay: 100ms; }
+    .delay-2 { transition-delay: 300ms; }
+</style>
+
+<div class="min-h-screen bg-slate-950 text-slate-300 overflow-x-hidden selection:bg-indigo-500/40">
+
+    <nav class="fixed top-0 w-full z-50 border-b border-white/5 bg-slate-950/80 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-cyan-400 rounded-lg shadow-[0_0_15px_rgba(99,102,241,0.5)]"></div>
+                <span class="text-white font-black tracking-tighter text-xl">GrowthLab</span>
+            </div>
+            <div class="flex gap-4">
+                <a href="/Login" class="text-sm font-bold text-slate-400 hover:text-white transition-colors">Sign In</a>
+                <a href="/Register" class="bg-white text-slate-950 px-4 py-2 rounded-lg text-sm font-black hover:bg-indigo-50 transition-all">Join the Lab</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative pt-44 pb-32 flex flex-col items-center text-center px-6">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-indigo-600/10 blur-[120px] rounded-full"></div>
+        </div>
+
+        <div class="relative z-10 max-w-4xl reveal active">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md">
+                <span class="text-[10px] font-black uppercase tracking-[0.3em] text-cyan-400">The Intelligence Standard</span>
+            </div>
+            
+            <h1 class="text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter mb-8">
+                Your channel is a <br />
+                <span class="bg-gradient-to-r from-indigo-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">Decision Engine.</span>
+            </h1>
+
+            <p class="text-xl md:text-2xl text-slate-400 max-w-2xl mx-auto leading-relaxed mb-12">
+                We bridge the gap between "Channel Analytics" and "Growth Strategy" by turning raw data into semantic intelligence.
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+                <a href="/Account/Register" class="w-full sm:w-auto px-10 py-5 bg-indigo-600 text-white font-black rounded-2xl text-lg shadow-[0_0_40px_rgba(79,70,229,0.4)] hover:bg-indigo-500 hover:scale-105 transition-all active:scale-95">
+                    Start Analyzing Now
+                </a>
+                <a href="/Account/Login" class="w-full sm:w-auto px-10 py-5 bg-white/5 border border-white/10 text-white font-bold rounded-2xl text-lg hover:bg-white/10 transition-all">
+                    Access Dashboard
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-6 py-24">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="reveal group p-8 rounded-[2.5rem] bg-slate-900/40 border border-white/5 hover:border-indigo-500/30 transition-all duration-500">
+                <div class="w-14 h-14 bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">Topic Grouping</h3>
+                <p class="text-slate-500 leading-relaxed">Titles are embedded into vector space and clustered. We analyze concepts, not just single uploads.</p>
+            </div>
+
+            <div class="reveal delay-1 group p-8 rounded-[2.5rem] bg-slate-900/40 border border-white/5 hover:border-cyan-500/30 transition-all duration-500">
+                <div class="w-14 h-14 bg-cyan-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">Fatigue Signals</h3>
+                <p class="text-slate-500 leading-relaxed">Spot precisely when your audience is losing interest in a pillar before your views start dropping.</p>
+            </div>
+
+            <div class="reveal delay-2 group p-8 rounded-[2.5rem] bg-slate-900/40 border border-white/5 hover:border-amber-500/30 transition-all duration-500">
+                <div class="w-14 h-14 bg-amber-500/10 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <svg class="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-4">Verdict Briefings</h3>
+                <p class="text-slate-500 leading-relaxed">Human-readable reports. Stop staring at graphs and start reading actionable growth steps.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 bg-slate-900/30">
+        <div class="max-w-5xl mx-auto px-6 text-center reveal">
+            <h2 class="text-4xl md:text-5xl font-bold text-white leading-tight italic">
+                "GrowthLab doesn't just show you what happened. It shows you what to do next."
+            </h2>
+            <div class="mt-8 flex items-center justify-center gap-4">
+                <div class="h-[1px] w-12 bg-indigo-500"></div>
+                <span class="text-indigo-400 font-black uppercase tracking-widest text-xs">Platform Philosophy</span>
+                <div class="h-[1px] w-12 bg-indigo-500"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-40 relative flex items-center justify-center">
+        <div class="reveal flex flex-col items-center">
+            <h2 class="text-5xl font-black text-white mb-10 tracking-tight">Ready to Initialize?</h2>
+            <a href="/Register" class="group relative px-16 py-8 bg-white text-slate-950 text-2xl font-black rounded-[2rem] shadow-[0_20px_60px_rgba(255,255,255,0.1)] hover:scale-110 active:scale-95 transition-all duration-500">
+                Create My Account
+                <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-[2.1rem] blur-xl opacity-0 group-hover:opacity-40 transition-opacity"></div>
+            </a>
+            <p class="mt-8 text-slate-500 font-bold uppercase tracking-widest text-xs">No Credit Card Required To Start</p>
+        </div>
+    </section>
+
 </div>
+
+<script>
+    function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            var elementVisible = 150;
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add("active");
+            }
+        }
+    }
+    window.addEventListener("scroll", reveal);
+    // Trigger on load
+    reveal();
+</script>

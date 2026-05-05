@@ -4,38 +4,41 @@ using System.Text.Json.Serialization;
 
 namespace CreatorGrowthLab.UI.Models.Analytics
 {
-public class AnalyticsResponse
-{
-    [JsonPropertyName("meta")]
-    public MetaInfo Meta { get; set; } = new();
+    public class AnalyticsResponse
+    {
+        [JsonPropertyName("meta")]
+        public MetaInfo Meta { get; set; } = new();
 
-    [JsonPropertyName("kpis")]
-    public Kpis Kpis { get; set; } = new();
+        [JsonPropertyName("kpis")]
+        public Kpis Kpis { get; set; } = new();
 
-    [JsonPropertyName("trends")]
-    public List<TrendPoint> Trends { get; set; } = new();
+        [JsonPropertyName("trends")]
+        public List<TrendPoint> Trends { get; set; } = new();
 
-    [JsonPropertyName("drivers")]
-    public List<DriverEffect> Drivers { get; set; } = new();
+        [JsonPropertyName("drivers")]
+        public List<DriverEffect> Drivers { get; set; } = new();
 
-    [JsonPropertyName("recommendations")]
-    public List<Recommendation> Recommendations { get; set; } = new();
+        [JsonPropertyName("recommendations")]
+        public List<Recommendation> Recommendations { get; set; } = new();
 
-    [JsonPropertyName("warnings")]
-    public List<string> Warnings { get; set; } = new();
+        [JsonPropertyName("warnings")]
+        public List<string> Warnings { get; set; } = new();
 
-    [JsonPropertyName("channel")]
-    public ChannelIdentity Channel { get; set; } = new();
+        [JsonPropertyName("channel")]
+        public ChannelIdentity Channel { get; set; } = new();
 
-    // 🧠 TOPIC INTELLIGENCE (THIS WAS MISSING)
-    [JsonPropertyName("topics")]
-    public List<TopicSummary> Topics { get; set; } = new();
+        // 🧠 TOPIC INTELLIGENCE (THIS WAS MISSING)
+        [JsonPropertyName("topics")]
+        public List<TopicSummary> Topics { get; set; } = new();
 
-    [JsonPropertyName("topic_assignments")]
-    public List<TopicAssignment> TopicAssignments { get; set; } = new();
+        [JsonPropertyName("topic_assignments")]
+        public List<TopicAssignment> TopicAssignments { get; set; } = new();
 
-    [JsonPropertyName("topic_insights")]
-    public List<string> TopicInsights { get; set; } = new();
+        [JsonPropertyName("topic_insights")]
+        public List<string> TopicInsights { get; set; } = new();
+        // 🧠 PERCEPTION SIGNAL
+        [JsonPropertyName("perception_signals")]
+        public List<PerceptionSignal> PerceptionSignals { get; set; } = new();
 }
 
 
@@ -169,16 +172,26 @@ public class AnalyticsResponse
 }
 
 
-public class TopicAssignment
+    public class TopicAssignment
+    {
+        [JsonPropertyName("video_id")]
+        public string VideoId { get; set; } = "";
+
+        [JsonPropertyName("topic_id")]
+        public int TopicId { get; set; }
+
+        [JsonPropertyName("topic_label")]
+        public string TopicLabel { get; set; } = "";
+    }
+
+public class PerceptionSignal
 {
-    [JsonPropertyName("video_id")]
-    public string VideoId { get; set; } = "";
-
-    [JsonPropertyName("topic_id")]
-    public int TopicId { get; set; }
-
-    [JsonPropertyName("topic_label")]
-    public string TopicLabel { get; set; } = "";
+    public string Signal { get; set; } = "";
+    public string Category { get; set; } = "";
+    public string Tendency { get; set; } = "";
+    public string Confidence { get; set; } = "";
+    public string Description { get; set; } = "";
 }
+
 
 }

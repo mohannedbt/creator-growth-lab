@@ -1,9 +1,11 @@
 using CreatorGrowthLab.UI.Models.Analytics;
 using CreatorGrowthLab.UI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CreatorGrowthLab.UI.Controllers
 {
+     [Authorize]
     public class HistoryController : Controller
     {
         private readonly AnalyticsRunStore _store;

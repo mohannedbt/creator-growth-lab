@@ -1,14 +1,61 @@
-@model List<string>
+@model CreatorGrowthLab.UI.Models.Analytics.AnalyticsResponse
 
-<div class="rounded-3xl border-2 border-indigo-200 bg-indigo-50 p-6">
-    <h4 class="font-black text-indigo-900 mb-3">
-        Topic Insights
-    </h4>
+<div class="relative overflow-hidden rounded-[2.5rem] border border-indigo-100 bg-white shadow-sm transition-all duration-300 hover:shadow-xl">
+    
+    <div class="h-2 w-full bg-gradient-to-r from-indigo-500 via-violet-500 to-fuchsia-500"></div>
 
-    <ul class="space-y-2 text-sm text-indigo-900">
-        @foreach (var insight in Model)
-        {
-            <li>• @insight</li>
-        }
-    </ul>
+    <div class="p-8">
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-200">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="text-xl font-display font-black text-slate-900 tracking-tight">Strategic Growth Path</h4>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-indigo-500">Optimization Engine v4.0</p>
+                </div>
+            </div>
+            
+            <span class="hidden md:inline-flex items-center rounded-full bg-indigo-50 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-indigo-600 ring-1 ring-inset ring-indigo-600/20">
+                Priority Actions
+            </span>
+        </div>
+
+        <div class="space-y-4">)
+            @for (int i = 0; i < Model.TopicAssignments.Count; i++)
+            {
+                <div class="group flex items-start gap-4 rounded-2xl border border-transparent p-4 transition-all duration-200 hover:border-slate-100 hover:bg-slate-50/50">
+                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-black text-slate-500 transition-colors group-hover:bg-indigo-600 group-hover:text-white">
+                        @(i + 1)
+                    </div>
+                    
+                    <div class="space-y-1">
+                        <p class="text-sm font-semibold leading-relaxed text-slate-700 group-hover:text-slate-900 transition-colors">
+                            @Model.TopicAssignments[i]
+                        </p>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold uppercase tracking-tighter text-slate-400">Impact Score:</span>
+                            <div class="flex gap-0.5">
+                                @* Visual representation of priority/impact *@
+                                <div class="h-1 w-3 rounded-full bg-indigo-500"></div>
+                                <div class="h-1 w-3 rounded-full bg-indigo-500"></div>
+                                <div class="h-1 w-3 rounded-full @(i < 2 ? "bg-indigo-500" : "bg-slate-200")"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="mt-8">
+            <button class="w-full flex items-center justify-center gap-2 rounded-2xl bg-slate-900 px-6 py-4 text-xs font-black uppercase tracking-[0.2em] text-white transition-all hover:bg-indigo-600 hover:shadow-xl hover:shadow-indigo-500/20 active:scale-[0.98]">
+                Generate Detailed Brief
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+            </button>
+        </div>
+    </div>
 </div>

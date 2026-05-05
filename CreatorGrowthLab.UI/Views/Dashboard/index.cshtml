@@ -5,272 +5,198 @@
     ViewData["Title"] = "Dashboard - Creator Growth Lab";
     var apiHealthy = (ViewBag.ApiHealthy as bool?) ?? false;
     var isReadOnly = Model.IsReadOnly;
-
-    string F0(double x) => x.ToString("N0", CultureInfo.InvariantCulture);
-    string F2(double x) => x.ToString("0.##", CultureInfo.InvariantCulture);
-    string P2(double x) => (x * 100.0).ToString("0.##", CultureInfo.InvariantCulture) + "%";
 }
 
 @section TopbarRight {
-    <div class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold border-2 backdrop-blur-sm 
-        @(apiHealthy ? "bg-emerald-50/80 text-emerald-700 border-emerald-300" : "bg-rose-50/80 text-rose-700 border-rose-300")">
-        <span class="relative flex h-2.5 w-2.5">
+    @* Status Pill: Refined with softer colors and better spacing *@
+    <div class="flex items-center gap-3 px-3 py-1.5 rounded-full border shadow-sm backdrop-blur-md transition-all
+        @(apiHealthy ? "bg-emerald-50/50 text-emerald-700 border-emerald-200" : "bg-rose-50/50 text-rose-700 border-rose-200")">
+        <span class="relative flex h-2 w-2">
             <span class="absolute inline-flex h-full w-full rounded-full opacity-75 animate-ping @(apiHealthy ? "bg-emerald-500" : "bg-rose-500")"></span>
-            <span class="relative inline-flex h-2.5 w-2.5 rounded-full @(apiHealthy ? "bg-emerald-600" : "bg-rose-600")"></span>
+            <span class="relative inline-flex h-2 w-2 rounded-full @(apiHealthy ? "bg-emerald-600" : "bg-rose-600")"></span>
         </span>
-        API Status: @(apiHealthy ? "Healthy" : "Offline")
+        <span class="text-xs font-bold tracking-tight uppercase">API @(apiHealthy ? "Active" : "Offline")</span>
     </div>
 }
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+<div class="max-w-7xl mx-auto px-6 lg:px-8 py-10 space-y-12">
 
-<!-- ================= QUERY PANEL ================= -->
-<div class="relative overflow-hidden rounded-3xl border-2 border-slate-200/60 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 shadow-2xl">
-    <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-    <div class="absolute inset-0 bg-grid-white/[0.03] bg-[size:30px_30px]"></div>
+    <div class="relative group overflow-hidden rounded-[2.5rem] bg-slate-950 p-1 shadow-2xl transition-all duration-500">
+        @* Animated background gradient *@
+        <div class="absolute -inset-[100%] animate-[spin_20s_linear_infinite] bg-[conic-gradient(from_0deg,transparent_0_340deg,#6366f1_360deg)] opacity-20"></div>
+        
+        <div class="relative rounded-[2.4rem] bg-slate-900/95 backdrop-blur-3xl p-8 lg:p-14 overflow-hidden">
+            @* Ambient Glow *@
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/10 blur-[100px] rounded-full"></div>
 
-    <div class="relative p-8 lg:p-12 space-y-8">
-
-        <!-- Header -->
-        <div class="space-y-4">
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-400/20 backdrop-blur-md">
-                <span class="text-xs font-bold text-indigo-300 uppercase tracking-widest">
-                    @(isReadOnly ? "Historical Snapshot" : "Growth Intelligence v2.0")
-                </span>
-            </div>
-
-            <h1 class="text-4xl lg:text-5xl font-black text-white">
-                Channel <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-400">Analysis</span>
-            </h1>
-
-            <p class="text-lg text-slate-400 max-w-2xl font-medium">
-                @(isReadOnly
-                    ? "Viewing a previously generated analytics snapshot."
-                    : "Input a YouTube ID or handle to generate a statistical performance baseline.")
-            </p>
-        </div>
-
-        <!-- FORM -->
-        <form asp-action="Analyze" method="post"
-              class="bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 p-1 shadow-inner">
-
-            @Html.AntiForgeryToken()
-
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-1">
-
-                <!-- Channel ID -->
-                <div class="md:col-span-6 p-4">
-                    <label class="block text-xs font-black text-indigo-300 uppercase tracking-widest mb-2 px-1">
-                        Channel ID
-                    </label>
-
-                    <input asp-for="Request.ChannelId"
-                        readonly="@(isReadOnly ? "readonly" : null)"
-                        tabindex="@(isReadOnly ? "-1" : null)"
-                        class="w-full rounded-xl border-0 px-4 py-3.5 font-bold transition-all
-                                @(isReadOnly
-                                ? "bg-white/5 text-slate-400 cursor-not-allowed ring-1 ring-white/10"
-                                : "bg-white/10 text-white focus:ring-2 focus:ring-indigo-500")"
-                        placeholder="UCxxxxxxxx or @@handle" />
-
-                </div>
-
-                <!-- Sample Size -->
-                <div class="md:col-span-2 p-4 border-l border-white/5">
-                    <label class="block text-xs font-black text-indigo-300 uppercase tracking-widest mb-2 px-1">
-                        Sample
-                    </label>
-                    <input asp-for="Request.NVideos" type="number"
-                           readonly="@(isReadOnly ? "readonly" : null)"
-                           class="w-full rounded-xl border-0 px-4 py-3.5 font-bold
-                                @(isReadOnly ? "bg-white/5 text-slate-400" : "bg-white/10 text-white")" />
-                </div>
-
-                <!-- Window -->
-                <div class="md:col-span-2 p-4 border-l border-white/5">
-                    <label class="block text-xs font-black text-indigo-300 uppercase tracking-widest mb-2 px-1">
-                        Window
-                    </label>
-                    <input asp-for="Request.BaselineWindow" type="number"
-                           readonly="@(isReadOnly ? "readonly" : null)"
-                           class="w-full rounded-xl border-0 px-4 py-3.5 font-bold
-                                @(isReadOnly ? "bg-white/5 text-slate-400" : "bg-white/10 text-white")" />
-                </div>
-
-                <!-- Submit -->
-                @if (!isReadOnly)
-                {
-                    <div class="md:col-span-2 p-2 flex items-stretch">
-                        <button type="submit"
-                                class="w-full rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white font-black
-                                       transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
-                            <span class="uppercase tracking-widest text-[10px]">Run Analysis</span>
-                        </button>
+            <div class="relative z-10 grid lg:grid-cols-2 gap-12 items-end">
+                <div class="space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-white/5 border border-white/10">
+                        <span class="flex h-1.5 w-1.5 rounded-full bg-indigo-400"></span>
+                        <span class="text-[10px] font-bold text-indigo-300 uppercase tracking-[0.2em]">
+                            @(isReadOnly ? "Archived Data" : "AI Engine v2.4")
+                        </span>
                     </div>
-                }
-            </div>
-        </form>
-    </div>
-</div>
 
-<!-- ================= ERROR ================= -->
-@if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
-{
-    <div class="rounded-2xl border-2 border-rose-300 bg-rose-50 p-6">
-        <h3 class="font-bold text-rose-900">Analysis Error</h3>
-        <p class="text-sm text-rose-800 mt-1">@Model.ErrorMessage</p>
-    </div>
-}
+                    <h1 class="text-5xl lg:text-6xl font-extrabold tracking-tight text-white">
+                        Growth <span class="bg-gradient-to-r from-indigo-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">Intelligence</span>
+                    </h1>
 
-<!-- ================= CONTENT ================= -->
-@if (Model.Response == null)
-{
-    <div class="rounded-3xl border-2 border-dashed border-slate-300 bg-slate-50 p-12 text-center">
-        <h2 class="text-xl font-bold text-slate-900">No analysis yet</h2>
-        <p class="text-sm text-slate-600 mt-2">
-            @(isReadOnly ? "This historical snapshot is empty." : "Run an analysis to get started.")
-        </p>
-    </div>
-}
-else
-{
-   @if (Model.Response?.Channel != null)
-{
-    <div class="flex items-center gap-4">
-        <img src="@Model.Response.Channel.ThumbnailUrl"
-             referrerpolicy="no-referrer"
-             class="w-12 h-12 rounded-full ring-2 ring-indigo-400/40" />
+                    <p class="text-lg text-slate-400 max-w-md leading-relaxed">
+                        @(isReadOnly 
+                            ? "Reviewing historical performance baseline for this creator." 
+                            : "Analyze any YouTube channel to unlock deep performance metrics.")
+                    </p>
+                </div>
 
-        <div>
-            <div class="text-slate-400 font-black text-lg">
-                @Model.Response.Channel.Title
-            </div>
-            <div class="text-slate-400 text-sm">
-                @Model.Response.Channel.ChannelId
+                <form asp-action="Analyze" method="post" class="relative group/form">
+                    @Html.AntiForgeryToken()
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-3 p-3 bg-white/5 border border-white/10 rounded-3xl backdrop-blur-md shadow-2xl">
+                        
+                        <div class="md:col-span-6 flex flex-col justify-center px-4 py-2 bg-white/5 rounded-2xl border border-white/5 focus-within:border-indigo-500/50 transition-colors">
+                            <label class="text-[10px] font-bold text-indigo-300/60 uppercase tracking-widest mb-1">Channel ID / Handle</label>
+                            <input asp-for="Request.ChannelId" readonly="@(isReadOnly ? "readonly" : null)"
+                                   class="bg-transparent border-0 p-0 text-white font-medium focus:ring-0 placeholder:text-slate-600"
+                                   placeholder="@@username" />
+                        </div>
+
+                        <div class="md:col-span-3 flex flex-col justify-center px-4 py-2 bg-white/5 rounded-2xl border border-white/5">
+                            <label class="text-[10px] font-bold text-indigo-300/60 uppercase tracking-widest mb-1">Sample</label>
+                            <input asp-for="Request.NVideos" type="number" readonly="@(isReadOnly ? "readonly" : null)"
+                                   class="bg-transparent border-0 p-0 text-white font-medium focus:ring-0" />
+                        </div>
+
+                        <div class="md:col-span-3">
+                            @if (!isReadOnly) {
+                                <button type="submit" class="h-full w-full py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition-all hover:scale-[1.02] active:scale-95 shadow-[0_0_20px_rgba(79,70,229,0.4)] flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                    Analyze
+                                </button>
+                            } else {
+                                <div class="h-full w-full py-4 rounded-2xl bg-slate-800 text-slate-500 font-bold flex items-center justify-center border border-white/5">
+                                    READ ONLY
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-}
-    <h2 class="text-2xl font-black text-slate-900 mt-10 mb-4">
-        Channel Overview
-    </h2>
-    @await Html.PartialAsync("Partials/_KpiCards", Model.Response)
 
-    <h2 class="text-2xl font-black text-slate-900 mt-12 mb-4">
-        Performance Over Time
-    </h2>
-    @await Html.PartialAsync("Partials/_TrendChart", Model.Response)
-
-
-<h2 class="text-2xl font-black text-slate-900 mt-12 mb-4">
-    What Drives Performance
-</h2>
-
-<div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
-
-    <!-- LEFT COLUMN: DRIVERS -->
-    <div>
-        @await Html.PartialAsync("Partials/_DriversTable", Model.Response)
-    </div>
-
-    <!-- RIGHT COLUMN: TOPICS -->
-    @if (Model.Response.Topics?.Any() == true)
-    {
-        <div>
-            <h3 class="text-2xl font-black text-slate-900 mb-2">
-                Topics That Matter Right Now
-            </h3>
-
-            <p class="text-sm text-slate-600 mb-6 max-w-2xl">
-                Topics are grouped by idea (not individual titles), sorted by recent usage and growth.
-                One-off experiments are grouped separately.
-            </p>
-
-            @await Html.PartialAsync(
-                "Partials/_TopicsCards",
-                Model.Response.Topics
-            )
+    @if (Model.Response == null) {
+        <div class="py-20 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[3rem] bg-slate-50/50">
+            <div class="w-16 h-16 bg-slate-200 rounded-2xl mb-4 flex items-center justify-center">
+                <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h2 class="text-xl font-bold text-slate-900">Waiting for Data</h2>
+            <p class="text-slate-500 mt-1">Enter a channel above to begin analysis.</p>
         </div>
-    }
+    } else {
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <div class="relative">
+                    <img src="@Model.Response.Channel.ThumbnailUrl" referrerpolicy="no-referrer"
+                         class="w-20 h-20 rounded-3xl shadow-2xl ring-4 ring-white" />
+                    <div class="absolute -bottom-2 -right-2 bg-indigo-600 text-white p-1.5 rounded-xl shadow-lg">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-black text-slate-900 tracking-tight">@Model.Response.Channel.Title</h2>
+                    <p class="text-slate-500 font-mono text-sm tracking-tighter">@Model.Response.Channel.ChannelId</p>
+                </div>
+            </div>
+            <div class="hidden md:block text-right">
+                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Last Analysis</p>
+                <p class="text-sm font-bold text-slate-900">@Model.Response.Meta.GeneratedAt.ToString("MMM dd, yyyy")</p>
+            </div>
+        </div>
 
-</div>
+        <section class="space-y-6">
+            <h3 class="text-sm font-black text-indigo-600 uppercase tracking-[0.3em]">Core Performance</h3>
+            @await Html.PartialAsync("Partials/_KpiCards", Model.Response)
+        </section>
 
+        <section class="bg-white rounded-[2.5rem] border border-slate-200 p-8 shadow-sm">
+             <div class="flex items-center justify-between mb-8">
+                <h3 class="text-xl font-bold text-slate-900">Velocity Over Time</h3>
+                <div class="flex gap-2">
+                    <span class="px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-bold rounded-lg uppercase">Daily Trend</span>
+                </div>
+            </div>
+            <div class="h-[400px]">
+                @await Html.PartialAsync("Partials/_TrendChart", Model.Response)
+            </div>
+        </section>
 
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-12">
+            <div>
+                <h3 class="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+                    <span class="w-1.5 h-6 bg-indigo-500 rounded-full"></span>
+                    Perception Signals
+                </h3>
+                @await Html.PartialAsync("Partials/_PerceptionSignals", Model.Response)
+            </div>
 
-
-    @if (Model.Response.TopicInsights?.Any() == true)
-    {
-        <h3 class="text-xl font-black text-slate-800 mt-8 mb-3">
-            Strategic Topic Insights
-        </h3>
-
-        @await Html.PartialAsync(
-            "Partials/_TopicInsights",
-            Model.Response.TopicInsights
-        )
-    }
-    <h2 class="text-2xl font-black text-slate-900 mt-12 mb-4">
-        Recommended Actions
-    </h2>
-    @await Html.PartialAsync("Partials/_Recommendations", Model.Response)
-
-
-    <div class="text-center pt-4">
-        <span class="text-sm font-semibold text-slate-600">
-            Generated @Model.Response.Meta.GeneratedAt.ToString("MMMM dd, yyyy HH:mm") UTC
-        </span>
-    </div>
-}
-</div>
-
-
-
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <script>
-        const canvas = document.getElementById('trendChart');
-if (!canvas) {
-    console.warn("trendChart canvas not found");
-} else {
-    // chart code goes here
-}
-
-        const labels = JSON.parse(canvas.dataset.labels);
-        const data = JSON.parse(canvas.dataset.values);
-
-        const ctx = canvas.getContext('2d');
-
-        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(99, 102, 241, 0.25)');
-        gradient.addColorStop(1, 'rgba(99, 102, 241, 0.01)');
-
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels,
-                datasets: [{
-                    data,
-                    borderColor: '#6366f1',
-                    backgroundColor: gradient,
-                    fill: true,
-                    tension: 0.4,
-                    borderWidth: 3,
-                    pointRadius: 4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: {
-                        ticks: {
-                            callback: v => v.toFixed(1) + 'x'
-                        }
-                    }
-                }
+            @if (Model.Response.Topics?.Any() == true) {
+                <div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2 flex items-center gap-2">
+                        <span class="w-1.5 h-6 bg-cyan-400 rounded-full"></span>
+                        Trending Content Pillars
+                    </h3>
+                    <p class="text-sm text-slate-500 mb-6 leading-relaxed">Topics grouped by semantic intent and growth velocity.</p>
+                    @await Html.PartialAsync("Partials/_TopicsCards", Model.Response.Topics)
+                </div>
             }
-        });
-    </script>
-}
+        </div>
+
+        <div class="bg-indigo-900 rounded-[3rem] p-10 text-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-12 opacity-10">
+                <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+            </div>
+            <div class="relative z-10">
+                <h3 class="text-3xl font-black mb-8">Recommended Strategy</h3>
+                @await Html.PartialAsync("Partials/_Recommendations", Model.Response)
+            </div>
+        </div>
+    }
+</div>
+<script>
+(function () {
+  function initTrendChart(canvas) {
+    const labels = JSON.parse(canvas.dataset.labels || "[]");
+    const values = JSON.parse(canvas.dataset.values || "[]").map(Number);
+
+    if (labels.length < 2 || values.length < 2) return;
+
+    const ctx = canvas.getContext("2d");
+    new Chart(ctx, {
+      type: "line",
+      data: {
+        labels,
+        datasets: [{
+          label: "Relative performance",
+          data: values,
+          tension: 0.35,
+          borderWidth: 2,
+          pointRadius: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { ticks: { callback: (v) => `${v}x` } }
+        }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const canvas = document.getElementById("trendChart");
+    if (canvas) initTrendChart(canvas);
+  });
+})();
+</script>

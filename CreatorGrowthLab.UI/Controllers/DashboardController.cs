@@ -3,10 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using CreatorGrowthLab.UI.Models.Analytics;
 using CreatorGrowthLab.UI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CreatorGrowthLab.UI.Controllers
 {
+    [Authorize]
     public class DashboardController : Controller
     {
         private readonly AnalyticsApiClientService _api;
@@ -53,6 +55,11 @@ namespace CreatorGrowthLab.UI.Controllers
             {
                 // 🔥 Single source of truth
                 vm.Response = await _api.AnalyzeChannelAsync(vm.Request, ct);
+                foreach (var s in vm.Response.PerceptionSignals)
+                {
+                    System.Console.WriteLine($"Category: {s.Category}, Confidence: {s.Confidence}");
+                }
+                System.Console.WriteLine($"API Response: {vm.Response.PerceptionSignals.ToList()}");
 
             }
             catch (Exception ex)

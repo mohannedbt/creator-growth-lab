@@ -7,74 +7,103 @@
     string P2(double x) => (x * 100).ToString("0.##") + "%";
 }
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+<div class="max-w-7xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-2 duration-700">
 
-    <!-- Header -->
-    <div>
-        <h1 class="text-3xl font-black text-slate-900">
-            Analysis History
-        </h1>
-        <p class="text-sm text-slate-600 font-medium mt-1">
-            Previously generated analytics snapshots
-        </p>
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-200 pb-8">
+        <div>
+            <h1 class="text-4xl font-display font-black text-slate-900 tracking-tight">
+                Archive <span class="text-slate-400">/</span> <span class="text-indigo-600">History</span>
+            </h1>
+            <p class="text-slate-500 font-medium mt-2">
+                Manage and review previously generated creator snapshots.
+            </p>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Total Runs</span>
+            <span class="px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-black">@Model.Count</span>
+        </div>
     </div>
 
     @if (!Model.Any())
     {
-        <div class="rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-12 text-center">
-            <h2 class="text-lg font-bold text-slate-900">
-                No history yet
-            </h2>
-            <p class="text-sm text-slate-600 mt-2">
-                Run your first analysis from the dashboard.
-            </p>
+        <div class="rounded-[3rem] border-2 border-dashed border-slate-200 bg-slate-50/50 p-20 text-center">
+            <div class="h-16 w-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <svg class="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <h2 class="text-xl font-bold text-slate-900">No records found</h2>
+            <p class="text-slate-500 mt-2 mb-8 max-w-xs mx-auto">You haven't analyzed any channels yet. Start by resolving a channel ID.</p>
+            <a href="/Resolve" class="inline-flex items-center px-6 py-3 rounded-xl bg-indigo-600 text-white font-bold text-sm hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200">
+                Begin First Run
+            </a>
         </div>
     }
     else
     {
-        <div class="overflow-hidden rounded-2xl border-2 border-slate-200 bg-white shadow-lg">
-            <table class="w-full">
-                <thead class="bg-slate-50 border-b-2 border-slate-200">
-                    <tr>
-                        <th class="px-6 py-4 text-left text-xs font-black text-slate-700 uppercase">Channel</th>
-                        <th class="px-6 py-4 text-left text-xs font-black text-slate-700 uppercase">Generated</th>
-                        <th class="px-6 py-4 text-right text-xs font-black text-slate-700 uppercase">Baseline</th>
-                        <th class="px-6 py-4 text-right text-xs font-black text-slate-700 uppercase">Performance</th>
-                        <th class="px-6 py-4 text-right text-xs font-black text-slate-700 uppercase">Engagement</th>
-                        <th class="px-6 py-4"></th>
+        <div class="overflow-hidden rounded-[2rem] border border-slate-200/60 bg-white shadow-sm">
+            <table class="w-full border-separate border-spacing-0">
+                <thead>
+                    <tr class="bg-slate-50/50">
+                        <th class="px-8 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">Identity</th>
+                        <th class="px-6 py-5 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">Timestamp</th>
+                        <th class="px-6 py-5 text-right text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">Baseline</th>
+                        <th class="px-6 py-5 text-right text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">Performance</th>
+                        <th class="px-6 py-5 text-right text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b border-slate-100">Engagement</th>
+                        <th class="px-8 py-5 border-b border-slate-100"></th>
                     </tr>
                 </thead>
 
-                <tbody class="divide-y divide-slate-100">
+                <tbody class="divide-y divide-slate-50">
                 @foreach (var r in Model)
                 {
-                    <tr class="hover:bg-slate-50 transition">
-                        <td class="px-6 py-4 font-semibold text-slate-900">
-                            @r.ChannelId
+                    <tr class="group hover:bg-slate-50/80 transition-all duration-200">
+                        <td class="px-8 py-6">
+                            <div class="flex items-center gap-3">
+                                <div class="h-10 w-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400 group-hover:bg-indigo-50 group-hover:text-indigo-600 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-slate-900 leading-tight">@r.ChannelId</span>
+                                    <span class="text-[11px] text-slate-400 font-medium">System Record</span>
+                                </div>
+                            </div>
                         </td>
 
-                        <td class="px-6 py-4 text-sm text-slate-600">
-                            @r.GeneratedAtUtc.ToString("MMM dd, yyyy HH:mm") UTC
+                        <td class="px-6 py-6">
+                            <div class="flex flex-col">
+                                <span class="text-sm font-semibold text-slate-700">@r.GeneratedAtUtc.ToString("MMM dd, yyyy")</span>
+                                <span class="text-[11px] text-slate-400 font-bold uppercase tracking-tighter">@r.GeneratedAtUtc.ToString("HH:mm") UTC</span>
+                            </div>
                         </td>
 
-                        <td class="px-6 py-4 text-right font-semibold">
-                            @F0(r.BaselineViewsPerDay)
+                        <td class="px-6 py-6 text-right">
+                            <span class="text-sm font-bold text-slate-600">@F0(r.BaselineViewsPerDay)</span>
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">VPD</p>
                         </td>
 
-                        <td class="px-6 py-4 text-right font-bold @(r.MedianRelativePerformance >= 1 ? "text-emerald-600" : "text-rose-600")">
-                            @r.MedianRelativePerformance.ToString("0.##")x
+                        <td class="px-6 py-6 text-right">
+                            @{
+                                var isPositive = r.MedianRelativePerformance >= 1.0;
+                                var colorClass = isPositive ? "text-emerald-600 bg-emerald-50 ring-emerald-600/10" : "text-rose-600 bg-rose-50 ring-rose-600/10";
+                            }
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-black ring-1 ring-inset @colorClass">
+                                @r.MedianRelativePerformance.ToString("0.##")x
+                            </span>
                         </td>
 
-                        <td class="px-6 py-4 text-right text-slate-700 font-semibold">
-                            @P2(r.AvgEngagementRate)
+                        <td class="px-6 py-6 text-right">
+                            <span class="text-sm font-bold text-slate-900">@P2(r.AvgEngagementRate)</span>
                         </td>
 
-                        <td class="px-6 py-4 text-right">
+                        <td class="px-8 py-6 text-right">
                             <a asp-controller="History"
                                asp-action="ViewBoard"
                                asp-route-id="@r.FileName"
-                               class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-indigo-600 text-white hover:bg-indigo-700 transition">
-                                View
+                               class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest bg-slate-900 text-white hover:bg-indigo-600 transition-all shadow-md active:scale-95">
+                                Open
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                             </a>
                         </td>
                     </tr>
@@ -83,4 +112,9 @@
             </table>
         </div>
     }
+
+    <div class="flex items-center justify-center gap-2 text-slate-400">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path></svg>
+        <span class="text-[10px] font-bold uppercase tracking-[0.2em]">Snapshots stored as local JSON architecture</span>
+    </div>
 </div>

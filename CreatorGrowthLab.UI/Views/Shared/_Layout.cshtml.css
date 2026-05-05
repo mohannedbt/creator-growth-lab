@@ -1,48 +1,50 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+﻿/* Custom Modern Scrollbar for the .custom-scrollbar class */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
 }
 
-a {
-  color: #0077cc;
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #e2e8f0; /* slate-200 */
+    border-radius: 20px;
+    transition: all 0.2s ease;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #cbd5e1; /* slate-300 */
 }
 
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+/* Smooth Focus States for Inputs */
+input:focus, button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px #6366f1; /* Indigo glow */
+    transition: box-shadow 0.2s ease;
 }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+/* Glassmorphism utility if not using Tailwind's arbitrary values */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
+/* Soft transition for all interactive elements */
+a, button, input {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Navbar active state indicator */
+.nav-active {
+    background: #ffffff !important;
+    color: #4f46e5 !important; /* indigo-600 */
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+/* Fix for footer positioning in our new Flex layout */
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+    /* Removing the absolute positioning from the old file */
+    width: 100%;
 }

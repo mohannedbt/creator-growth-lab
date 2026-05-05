@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CreatorGrowthLab.UI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e284b05afc06784e564a7bfd710062e83efadc49")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c50a5b710e46253c3dd8eb9a7a6b5dce30b4977c")]
 [assembly: System.Reflection.AssemblyProductAttribute("CreatorGrowthLab.UI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CreatorGrowthLab.UI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

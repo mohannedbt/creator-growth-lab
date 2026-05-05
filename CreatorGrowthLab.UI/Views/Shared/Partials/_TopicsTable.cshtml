@@ -1,51 +1,97 @@
 @model List<CreatorGrowthLab.UI.Models.Analytics.TopicSummary>
 
-<div class="rounded-3xl border-2 border-slate-200 bg-white p-6 shadow-sm">
-    <h3 class="text-lg font-black text-slate-900 mb-4">
-        Topic Performance & Momentum
-    </h3>
+<div class="relative overflow-hidden rounded-[2rem] border border-slate-200/60 bg-white shadow-sm">
+    @* Soft Header *@
+    <div class="px-8 py-6 border-b border-slate-100 bg-slate-50/40 flex items-center justify-between">
+        <div>
+            <h3 class="text-lg font-bold text-slate-900 tracking-tight">Topic Performance & Momentum</h3>
+            <p class="text-[11px] font-bold text-slate-400 uppercase tracking-[0.15em] mt-1">Growth signals by content pillar</p>
+        </div>
+        <div class="flex gap-1.5">
+            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+            <span class="h-2 w-2 rounded-full bg-slate-200"></span>
+            <span class="h-2 w-2 rounded-full bg-slate-200"></span>
+        </div>
+    </div>
 
     <div class="overflow-x-auto">
-        <table class="min-w-full text-sm">
+        <table class="min-w-full border-separate border-spacing-0">
             <thead>
-                <tr class="text-slate-500 uppercase tracking-wider text-xs border-b">
-                    <th class="py-2 text-left">Topic</th>
-                    <th class="py-2 text-center">Videos</th>
-                    <th class="py-2 text-center">Avg</th>
-                    <th class="py-2 text-center">Recent</th>
-                    <th class="py-2 text-center">Momentum</th>
-                    <th class="py-2 text-center">Volatility</th>
-                    <th class="py-2 text-center">Status</th>
+                <tr class="bg-slate-50/20">
+                    <th class="px-8 py-4 text-left text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Topic</th>
+                    <th class="px-4 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Frequency</th>
+                    <th class="px-4 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Performance</th>
+                    <th class="px-4 py-4 text-center text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Momentum</th>
+                    <th class="px-8 py-4 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-100">Status</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="divide-y divide-slate-50">
             @foreach (var t in Model)
             {
-                var status =
-                    t.Momentum >= 0.10 ? "Improving" :
-                    t.Momentum <= -0.10 ? "Fatigue" :
-                    "Stable";
+                var status = t.Momentum >= 0.10 ? "Improving" : t.Momentum <= -0.10 ? "Fatigue" : "Stable";
+                
+                var statusClass = status switch {
+                    "Improving" => "bg-emerald-50 text-emerald-700 ring-emerald-600/20",
+                    "Fatigue" => "bg-rose-50 text-rose-700 ring-rose-600/20",
+                    _ => "bg-slate-50 text-slate-600 ring-slate-600/10"
+                };
 
-                var statusColor =
-                    status == "Improving" ? "text-emerald-600" :
-                    status == "Fatigue" ? "text-rose-600" :
-                    "text-slate-600";
+                var momentumIcon = t.Momentum > 0 ? "arrow-up-right" : "arrow-down-right";
+                var momentumColor = t.Momentum > 0 ? "text-emerald-500" : (t.Momentum < 0 ? "text-rose-500" : "text-slate-400");
 
-                <tr class="border-b last:border-0">
-                    <td class="py-2 font-semibold">@t.Label</td>
-                    <td class="py-2 text-center">@t.NVideos</td>
-                    <td class="py-2 text-center">@t.AvgRelativePerformance.ToString("0.00")x</td>
-                    <td class="py-2 text-center">@t.RecentAvgRelativePerformance.ToString("0.00")x</td>
-                    <td class="py-2 text-center">
-                        @t.Momentum.ToString("+0.00;-0.00;0.00")
+                <tr class="group hover:bg-slate-50/80 transition-all duration-200">
+                    @* Topic Label *@
+                    <td class="px-8 py-5">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">@t.Label</span>
+                            <span class="text-[10px] text-slate-400 font-medium">Volatility: @t.Volatility.ToString("0.00")</span>
+                        </div>
                     </td>
-                    <td class="py-2 text-center">@t.Volatility.ToString("0.00")</td>
-                    <td class="py-2 text-center font-bold @statusColor">
-                        @status
+
+                    @* Video Count Badge *@
+                    <td class="px-4 py-5 text-center">
+                        <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold">
+                            @t.NVideos vids
+                        </span>
+                    </td>
+
+                    @* Performance Benchmarks *@
+                    <td class="px-4 py-5">
+                        <div class="flex flex-col items-center">
+                            <span class="text-sm font-black text-slate-800">@t.RecentAvgRelativePerformance.ToString("0.00")x</span>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Avg @t.AvgRelativePerformance.ToString("0.0")x</span>
+                        </div>
+                    </td>
+
+                    @* Momentum Visualization *@
+                    <td class="px-4 py-5 text-center">
+                        <div class="flex items-center justify-center gap-1.5">
+                            @if (t.Momentum != 0) {
+                                <div class="flex items-center @momentumColor">
+                                    <span class="text-xs font-black">@(t.Momentum > 0 ? "+" : "")@((t.Momentum * 100).ToString("0"))%</span>
+                                </div>
+                            } else {
+                                <span class="text-xs font-bold text-slate-300">--</span>
+                            }
+                        </div>
+                    </td>
+
+                    @* Status Pill *@
+                    <td class="px-8 py-5 text-right">
+                        <span class="inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-wider ring-1 ring-inset @statusClass">
+                            @status
+                        </span>
                     </td>
                 </tr>
             }
             </tbody>
         </table>
+    </div>
+    
+    @* Footer Callout *@
+    <div class="bg-indigo-50/30 px-8 py-3 text-center">
+        <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-[0.2em]">
+            Data updated in real-time based on latest 50 video performance
+        </p>
     </div>
 </div>
