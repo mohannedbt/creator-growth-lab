@@ -24,11 +24,13 @@ class TrendPoint(BaseModel):
     views_per_day: float
     relative_performance: float
 
-class DriverEffect(BaseModel):
-    feature: str
-    effect_percent: float
-    unit_change: str
-    direction: Literal["increase", "decrease"]
+class PerceptionSignal(BaseModel):
+    signal: str                  # Human-readable name
+    category: str                # Credibility / Clarity / Intent / Context
+    tendency: str                # "Often present", "Often absent", "Inconclusive"
+    confidence: str              # "low", "medium", "high"
+    description: str             # One-sentence explanation
+
 
 class Recommendation(BaseModel):
     title: str
@@ -59,6 +61,9 @@ class TopicSummary(BaseModel):
     hit_rate: float = 0.0          # % of videos >= baseline
     best_recent: float = 0.0
     worst_recent: float = 0.0
+    verdict: str = "Neutral"      # "Strong", "Positive", "Neutral", "Negative", "Avoid"
+    verdict_confidence: str = "low"  # "low", "medium", "high"
+
 
 
     # 🆕 temporal intelligence
@@ -83,13 +88,10 @@ class AnalyticsResponse(BaseModel):
     meta: MetaInfo
     channel: ChannelIdentity
     kpis: Kpis
-
-    trends: List[TrendPoint] = Field(default_factory=list)
-    drivers: List[DriverEffect] = Field(default_factory=list)
-    recommendations: List[Recommendation] = Field(default_factory=list)
-    warnings: List[str] = Field(default_factory=list)
-
-    # 🆕 topic intelligence
-    topics: List[TopicSummary] = Field(default_factory=list)
-    topic_assignments: List[TopicAssignment] = Field(default_factory=list)
-    topic_insights: List[str] = Field(default_factory=list)
+    trends: List[TrendPoint]
+    recommendations: List[Recommendation]
+    warnings: List[str]
+    topics: List[TopicSummary]
+    topic_assignments: List[TopicAssignment]
+    topic_insights: List[str]
+    perception_signals: List[PerceptionSignal]

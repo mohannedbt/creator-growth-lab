@@ -6,20 +6,21 @@ from typing import List
 
 from .youtube_service import YouTubeService
 from .feature_service import FeatureService
-from .model_service import ModelService
+from .topic_service import TopicService
+from .perception_service import PerceptionService
 
 from ..core.config import ensure_dirs, RESULTS_DIR
 from ..schemas.request import ChannelAnalysisRequest
-from .topic_service import TopicService
-
 from ..schemas.response import (
     AnalyticsResponse,
     MetaInfo,
     Kpis,
     TrendPoint,
-    DriverEffect,
-    Recommendation,
 )
+
+# Reuse service instances across requests (important on Windows)
+_TOPIC_SERVICE = None
+_PERCEPTION_SERVICE = None
 
 
 @dataclass
@@ -37,22 +38,22 @@ class AnalyticsService:
 
         yt = YouTubeService()
 
-        # ✅ CHANNEL IDENTITY (ONCE)
+        # ✅ channel identity
         channel_identity = yt.get_channel_identity(req.channel_id)
 
+        # ✅ fetch videos
         uploads_pid = yt.get_uploads_playlist_id(req.channel_id)
         video_ids = yt.list_playlist_video_ids(uploads_pid, req.n_videos)
         details = yt.get_videos_details(video_ids)
-
         rows = list(details.values())
 
-        # ---- views/day Corrected with a Window Limit ----
+        # ---- views/day with capped window ----
         for r in rows:
             r["published_at"] = self._to_dt(r["published_at"])
             age_days = max((now - r["published_at"]).days, 1)
-            window = min(age_days, 14)
-            window = max(window, 1)
+            window = max(1, min(age_days, 14))
             r["views_per_day"] = r["views"] / window
+
         # ---- features ----
         fs = FeatureService()
         for r in rows:
@@ -62,39 +63,44 @@ class AnalyticsService:
 
         rows_sorted = sorted(rows, key=lambda x: x["published_at"], reverse=True)
 
-        # ---- baseline ----
-        window = rows_sorted[: req.baseline_window]
-        vpd = sorted(r["views_per_day"] for r in window)
-        baseline = vpd[len(vpd) // 2] if vpd else 1.0
+        # ---- baseline (median views/day in baseline window) ----
+        baseline_window = rows_sorted[: req.baseline_window]
+        vpd_sorted = sorted(r["views_per_day"] for r in baseline_window)
+        baseline = vpd_sorted[len(vpd_sorted) // 2] if vpd_sorted else 1.0
 
         for r in rows_sorted:
             r["relative_performance"] = r["views_per_day"] / baseline
 
-        eng_rates = [r["engagement_rate"] for r in rows_sorted]
-        rel_perf = [r["relative_performance"] for r in rows_sorted]
+        eng_rates = [r["engagement_rate"] for r in rows_sorted] or [0.0]
+        rel_perf = [r["relative_performance"] for r in rows_sorted] or [1.0]
 
         kpis = Kpis(
             videos_analyzed=len(rows_sorted),
             baseline_views_per_day=float(baseline),
             median_relative_performance=float(sorted(rel_perf)[len(rel_perf) // 2]),
-            avg_engagement_rate=sum(eng_rates) / len(eng_rates),
+            avg_engagement_rate=float(sum(eng_rates) / len(eng_rates)),
         )
 
         trends: List[TrendPoint] = [
             TrendPoint(
                 published_at=r["published_at"],
-                views=r["views"],
-                views_per_day=round(r["views_per_day"], 3),
-                relative_performance=round(r["relative_performance"], 3),
+                views=int(r["views"]),
+                views_per_day=float(round(r["views_per_day"], 3)),
+                relative_performance=float(round(r["relative_performance"], 3)),
             )
             for r in rows_sorted[:30]
         ]
 
-        ms = ModelService()
-        model_out = ms.train_and_explain(rows_sorted)
-        # ---- 8.5) Topic analysis (NEW) ----
-        ts = TopicService()
-        topic_analysis = ts.analyze(rows_sorted)
+        # ---- Topic analysis + Perception signals (reused singletons) ----
+        global _TOPIC_SERVICE, _PERCEPTION_SERVICE
+        if _TOPIC_SERVICE is None:
+            _TOPIC_SERVICE = TopicService()
+        if _PERCEPTION_SERVICE is None:
+            _PERCEPTION_SERVICE = PerceptionService()
+
+        topic_analysis = _TOPIC_SERVICE.analyze(rows_sorted)
+        perception_signals = _PERCEPTION_SERVICE.analyze(rows_sorted)
+        print(f"Perception signals: {perception_signals}")
 
         resp = AnalyticsResponse(
             meta=MetaInfo(
@@ -103,15 +109,18 @@ class AnalyticsService:
                 baseline_window=req.baseline_window,
                 generated_at=now,
             ),
-            channel=channel_identity,  # ✅ PERSISTED
+            channel=channel_identity,
             kpis=kpis,
             trends=trends,
-            drivers=[DriverEffect(**d) for d in model_out.drivers],
-            recommendations=[Recommendation(**r) for r in model_out.recommendations],
-            warnings=list(model_out.warnings),
+
+            # ✅ ModelService removed for now (keep schema satisfied)
+            recommendations=[],
+            warnings=[],
+
             topics=topic_analysis.topics,
             topic_assignments=topic_analysis.assignments,
             topic_insights=topic_analysis.insights,
+            perception_signals=perception_signals,
         )
 
         self._save_result(resp)

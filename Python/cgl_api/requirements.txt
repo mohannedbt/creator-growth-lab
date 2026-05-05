@@ -2,6 +2,12 @@ fastapi>=0.110
 uvicorn[standard]>=0.27
 pydantic>=2.5
 python-dotenv>=1.0
+requests>=2.31
+isodate>=0.6
+tabulate>=0.9
+google-genai>=0.6
+transformers>=4.50,<5
+peft>=0.14,<1
 sentence-transformers
 hdbscan
 scikit-learn

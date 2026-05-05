@@ -18,8 +18,15 @@ def ensure_dirs() -> None:
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
 # load .env from project root (parent of cgl_api)
-load_dotenv(dotenv_path=BASE_DIR.parent / ".env", override=False)
+# NOTE: override=True so local .env wins over any stale machine/user env vars.
+load_dotenv(dotenv_path=BASE_DIR.parent / ".env", override=True)
 
-YOUTUBE_API_KEY = os.getenv("YOUTUBE_API_KEY", "").strip()
+def _clean_env_value(value: str) -> str:
+    return (value or "").strip().strip('"').strip("'")
+
+# Be forgiving: users often paste keys with surrounding quotes in .env
+YOUTUBE_API_KEY = _clean_env_value(os.getenv("YOUTUBE_API_KEY", ""))
 if not YOUTUBE_API_KEY:
     raise ValueError("YOUTUBE_API_KEY is not set in the environment variables.")
+
+GEMINI_API_KEY = _clean_env_value(os.getenv("GEMINI_API_KEY", ""))
